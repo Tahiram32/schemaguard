@@ -1,4 +1,4 @@
-name: SchemaGuard
+name: Schema Guardian
 description: Detect breaking schema changes in SQL migrations, data models, and schema files before they reach production
 author: Tahiram32
 
