@@ -1,0 +1,64 @@
+name: SchemaGuard
+description: Detect breaking schema changes in SQL migrations, data models, and schema files before they reach production
+author: Tahiram32
+
+branding:
+  icon: database
+  color: blue
+
+inputs:
+  repo:
+    description: Path to the repository root to scan
+    required: false
+    default: ${{ github.workspace }}
+  base-ref:
+    description: Git ref to diff against (e.g. origin/main)
+    required: false
+    default: origin/main
+  format:
+    description: Output format — text | json | markdown | github | sarif
+    required: false
+    default: markdown
+  fail-on:
+    description: Minimum risk level that causes a non-zero exit — none | low | medium | high | critical
+    required: false
+    default: high
+  badge:
+    description: Write schemaguard-badge.svg to the repository root
+    required: false
+    default: "false"
+
+outputs:
+  risk-level:
+    description: Highest risk level found — none | low | medium | high | critical
+    value: ${{ steps.run.outputs.risk-level }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.13"
+
+    - name: Install schemaguard
+      shell: bash
+      run: pip install schemaguard
+
+    - name: Run SchemaGuard
+      id: run
+      shell: bash
+      run: |
+        set +e
+        OUTPUT=$(schemaguard \
+          --repo "${{ inputs.repo }}" \
+          --base "${{ inputs.base-ref }}" \
+          --format "${{ inputs.format }}" \
+          --fail-on "${{ inputs.fail-on }}" \
+          ${{ inputs.badge == 'true' && '--badge' || '' }})
+        EXIT_CODE=$?
+
+        RISK_LEVEL=$(echo "$OUTPUT" | grep -E '^risk-level=' | tail -1 | cut -d= -f2)
+        echo "risk-level=${RISK_LEVEL}" >> "$GITHUB_OUTPUT"
+        echo "$OUTPUT" >> "$GITHUB_STEP_SUMMARY"
+        exit $EXIT_CODE
