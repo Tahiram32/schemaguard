@@ -43,7 +43,7 @@ runs:
 
     - name: Install schemaguard
       shell: bash
-      run: pip install schemaguard
+      run: pip install schema-guardian
 
     - name: Run SchemaGuard
       id: run

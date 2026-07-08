@@ -90,7 +90,7 @@ jobs:
 ### CLI
 
 ```bash
-pip install schemaguard
+pip install schema-guardian
 
 # Diff current branch against origin/main
 schemaguard --base origin/main
