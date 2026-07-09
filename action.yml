@@ -27,6 +27,10 @@ inputs:
     description: Write schemaguard-badge.svg to the repository root
     required: false
     default: "false"
+  ignore-file:
+    description: Path to a custom ignore rules file (default .schemaguardignore)
+    required: false
+    default: ""
 
 outputs:
   risk-level:
@@ -55,7 +59,8 @@ runs:
           --base "${{ inputs.base-ref }}" \
           --format "${{ inputs.format }}" \
           --fail-on "${{ inputs.fail-on }}" \
-          ${{ inputs.badge == 'true' && '--badge' || '' }})
+          ${{ inputs.badge == 'true' && '--badge' || '' }} \
+          ${{ inputs['ignore-file'] != '' && format('--ignore-file "{0}"', inputs['ignore-file']) || '' }})
         EXIT_CODE=$?
 
         RISK_LEVEL=$(echo "$OUTPUT" | grep -E '^risk-level=' | tail -1 | cut -d= -f2)

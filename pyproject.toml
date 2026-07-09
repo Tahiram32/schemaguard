@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "schema-guardian"
-version = "0.1.0"
+version = "0.2.0"
 description = "Detect breaking schema changes in SQL migrations, data models, and schema files before they reach production"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [{name = "Tahiram32", email = "tahiramuhammad53@gmail.com"}]
-keywords = ["schema", "migration", "database", "sql", "pydantic", "protobuf", "avro", "github-action", "ci", "data"]
+keywords = ["schema", "migration", "database", "sql", "pydantic", "protobuf", "avro", "github-action", "ci", "data", "graphql", "prisma", "django"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

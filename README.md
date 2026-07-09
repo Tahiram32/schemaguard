@@ -60,6 +60,42 @@ SchemaGuard closes that gap by running in CI as a GitHub Action or local CLI. It
 | JSON Schema required field removed | 🟠 High |
 | dbt column removed from `schema.yml` | 🟠 High |
 
+### 🔷 GraphQL Schemas (`.graphql`, `.gql`)
+
+| Change | Severity |
+|---|---|
+| Type removed | 🔴 Critical |
+| Field removed from type | 🔴 Critical |
+| Field changed from non-null to nullable | 🟠 High |
+| Enum value removed | 🟠 High |
+| Interface removed | 🟠 High |
+| Input field removed | 🟠 High |
+| Directive removed | 🟡 Medium |
+
+### 🔺 Prisma Schema (`schema.prisma`)
+
+| Change | Severity |
+|---|---|
+| Model removed | 🔴 Critical |
+| Model field removed | 🔴 Critical |
+| Primary key (`@id`) removed | 🔴 Critical |
+| Unique/index constraint removed | 🟠 High |
+| Relation removed | 🟠 High |
+| Enum removed | 🟠 High |
+| Field default removed | 🟡 Medium |
+
+### 🐍 Django Models
+
+| Change | Severity |
+|---|---|
+| Model class removed | 🔴 Critical |
+| Field removed | 🔴 Critical |
+| ForeignKey removed | 🔴 Critical |
+| OneToOneField removed | 🔴 Critical |
+| ManyToManyField removed | 🟠 High |
+| unique=True removed | 🟠 High |
+| db_table changed | 🟠 High |
+
 ---
 
 ## 🚀 Quick Start
@@ -80,7 +116,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: Tahiram32/schemaguard@v0.1.0
+      - uses: Tahiram32/schemaguard@v0.2.0
         with:
           base-ref: origin/main
           format: github
@@ -90,7 +126,11 @@ jobs:
 ### CLI
 
 ```bash
+# New installation
 pip install schema-guardian
+
+# Existing users — upgrade to v0.2.0
+pip install --upgrade schema-guardian
 
 # Diff current branch against origin/main
 schemaguard --base origin/main
@@ -129,6 +169,25 @@ All options are available as CLI flags and as GitHub Action inputs.
 
 ---
 
+## 🚫 Ignore Rules (`.schemaguardignore`)
+
+Create a `.schemaguardignore` file in your repo root to suppress known-safe findings:
+
+```
+# Ignore specific files or glob patterns
+tests/fixtures/**
+migrations/squash_*.sql
+seeds/
+
+# Ignore findings whose message contains a substring
+[ignore-messages]
+NOT NULL constraint added
+```
+
+Pass a custom ignore file path with `--ignore-file /path/to/file`.
+
+---
+
 ## 🔬 How It Works
 
 SchemaGuard operates in three independent analysis layers, each targeting a different class of schema artifact.
@@ -151,10 +210,10 @@ All three analyzers produce a unified list of `Finding` objects with a file path
 - [x] dbt `schema.yml` column change detection
 - [x] SARIF output for GitHub Code Scanning
 - [x] GitHub Action composite workflow
-- [ ] GraphQL schema change detection
-- [ ] Prisma schema support
-- [ ] Django model field analysis
-- [ ] Custom ignore rules via `.schemaguardignore`
+- [x] GraphQL schema change detection
+- [x] Prisma schema support
+- [x] Django model field analysis
+- [x] Custom ignore rules via `.schemaguardignore`
 
 ---
 
